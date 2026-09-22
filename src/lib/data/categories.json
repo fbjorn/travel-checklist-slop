@@ -1,0 +1,19 @@
+[
+  { "id": "essentials", "name": "Travel essentials", "icon": "passport", "color": "sand" },
+  { "id": "clothing", "name": "Clothes & layers", "icon": "shirt", "color": "peach" },
+  { "id": "footwear", "name": "Shoes & footwear", "icon": "shoe", "color": "sand" },
+  { "id": "toiletries", "name": "Toiletries & care", "icon": "bottle", "color": "pink" },
+  { "id": "health", "name": "Health & first aid", "icon": "medical", "color": "pink" },
+  { "id": "tech", "name": "Tech & gadgets", "icon": "laptop", "color": "lavender" },
+  { "id": "beach", "name": "Beach & pool", "icon": "sun", "color": "yellow" },
+  { "id": "bags", "name": "Bags & organization", "icon": "bag", "color": "mint" },
+  { "id": "flight", "name": "In-flight comfort", "icon": "plane", "color": "blue" },
+  { "id": "outdoors", "name": "Outdoors & adventure", "icon": "mountain", "color": "mint" },
+  { "id": "snow", "name": "Ski & snow gear", "icon": "snow", "color": "blue" },
+  { "id": "fitness", "name": "Fitness & sports", "icon": "activity", "color": "peach" },
+  { "id": "food", "name": "Food & drink", "icon": "coffee", "color": "sand" },
+  { "id": "family", "name": "Little travelers", "icon": "heart", "color": "pink" },
+  { "id": "pets", "name": "Pet essentials", "icon": "paw", "color": "peach" },
+  { "id": "vehicle", "name": "On the road", "icon": "car", "color": "blue" },
+  { "id": "extras", "name": "The little extras", "icon": "sparkles", "color": "lavender" }
+]
