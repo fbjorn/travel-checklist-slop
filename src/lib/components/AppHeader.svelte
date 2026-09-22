@@ -7,7 +7,7 @@
 	<div class="mx-auto flex h-21 max-w-7xl items-center justify-between gap-4 px-5 sm:px-8 lg:px-12">
 		<a href="#main" class="flex items-center gap-2.5 text-forest" aria-label="Roam, your travel checklist">
 			<span class="grid size-9 place-items-center rounded-xl bg-forest text-lime"><Icon name="case" size={23} /></span>
-			<span class="text-[30px] font-extrabold tracking-[-1.7px]">roam<span class="text-terracotta">.</span></span>
+			<span class="font-display text-[32px] font-semibold tracking-[-.8px]">roam<span class="text-terracotta">.</span></span>
 		</a>
 		<p class="ml-10 hidden text-[10px] font-semibold tracking-[.19em] text-muted lg:block">LESS TO REMEMBER. MORE TO EXPLORE.</p>
 		<nav aria-label="Trips" class="flex items-center gap-2 sm:gap-3">

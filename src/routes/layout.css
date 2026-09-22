@@ -11,12 +11,12 @@
 	--color-lime: #e5edb3;
 	--color-sand: #eeecde;
 	--color-terracotta: #b86849;
-	--font-sans: 'Avenir Next', 'Avenir', 'Segoe UI', sans-serif;
-	--font-display: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+	--font-sans: 'Inter', 'Helvetica Neue', 'Segoe UI', sans-serif;
+	--font-display: 'Newsreader', 'Iowan Old Style', Georgia, serif;
 }
 
 @layer base {
-	:root { font-family: var(--font-sans); color: var(--color-ink); background: var(--color-canvas); font-synthesis: none; -webkit-font-smoothing: antialiased; }
+	:root { font-family: var(--font-sans); color: var(--color-ink); background: var(--color-canvas); font-synthesis: none; font-optical-sizing: auto; -webkit-font-smoothing: antialiased; }
 	body { margin: 0; min-width: 320px; }
 	button, input, select { font: inherit; }
 	button, a, input, select { -webkit-tap-highlight-color: transparent; }
@@ -30,6 +30,7 @@
 }
 
 @layer components {
+	.font-display { font-weight: 500; letter-spacing: -.025em; }
 	.button-dark { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-forest px-5 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-[#213e2f] disabled:opacity-40; }
 	.button-lime { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-lime px-4 py-3 text-xs font-semibold text-forest transition-colors hover:bg-[#f0f5cf] disabled:opacity-40; }
 	.button-quiet { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-3 py-2 text-xs font-medium text-forest transition-colors hover:bg-sand disabled:opacity-40; }

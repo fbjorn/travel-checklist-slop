@@ -165,17 +165,22 @@
 			{#if app.mode === 'builder'}<TopicPicker selected={app.trip.topicIds} ontoggle={app.toggleTopic} onbrowse={() => topicModal = true} />{:else}
 				<section class="rounded-2xl border border-line bg-paper p-6"><h2 class="mb-5 text-sm font-semibold">A little at a time.</h2><div class="space-y-4">{#each activeCategories as category}{@const items = app.trip.items.filter((item) => item.categoryId === category.id)}{@const categoryProgress = progress(items)}<div><div class="mb-2 flex items-center gap-2"><Icon name={category.icon} size={14} class="text-muted" /><span class="flex-1 truncate text-[11px]">{category.name}</span><span class="text-[10px] text-muted">{categoryProgress.packed}/{categoryProgress.total}</span></div><div class="h-1 overflow-hidden rounded-full bg-canvas"><div class="h-full rounded-full bg-[#98a77b] transition-all duration-300" style:width={`${categoryProgress.percent}%`}></div></div></div>{/each}</div></section>
 			{/if}
-			<div class="px-4 py-2 text-center"><Icon name="sun" size={22} class="mx-auto mb-2 text-[#a5ad84]" /><p class="font-display text-[18px] italic text-[#7b856b]">Less stuff on your mind.<br />More world at your feet.</p></div>
+			<div class="px-4 py-2 text-center"><Icon name="sun" size={22} class="mx-auto mb-2 text-[#a5ad84]" /><p class="font-display text-[18px] text-[#7b856b]">Less stuff on your mind.<br />More world at your feet.</p></div>
 		</aside>
 	</div>
 
-	<footer class="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-6 text-[10px] text-muted"><span class="flex items-center gap-2"><span class="text-base font-bold tracking-[-.6px] text-forest">roam.</span>A little prep. A better trip.</span><span class="flex items-center gap-1.5"><Icon name="lock" size={11} /> Just you, your browser, and a little wanderlust.</span></footer>
+	<footer class="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-line pt-6 text-[10px] text-muted"><span class="flex items-center gap-2"><span class="font-display text-lg font-semibold tracking-[-.4px] text-forest">roam.</span>A little prep. A better trip.</span><span class="flex items-center gap-1.5"><Icon name="lock" size={11} /> Just you, your browser, and a little wanderlust.</span></footer>
 </main>
 
 <div class="safe-bottom fixed inset-x-0 bottom-0 z-20 border-t border-line bg-paper/95 px-5 pt-3 backdrop-blur-xl lg:hidden">
-	<div class="mx-auto flex max-w-2xl items-center justify-between gap-4">
-		<div class="min-w-0"><p class="text-sm font-semibold tracking-tight">{app.mode === 'builder' ? `${summary.total} items. One great trip.` : `${summary.packed} of ${summary.total} packed`}<span class="ml-1 text-xs text-muted">{app.mode === 'packing' ? `· ${summary.percent}%` : ''}</span></p>{#if app.mode === 'builder'}<p class="mt-1 text-[9px] text-muted">{app.storageError ? 'Storage needs attention' : 'Saved on your device. Ready when you are.'}</p>{:else}<div class="mt-2 h-1.5 w-34 overflow-hidden rounded-full bg-sand"><div class="h-full rounded-full bg-forest transition-all duration-300" style:width={`${summary.percent}%`}></div></div>{/if}</div>
-		{#if app.mode === 'builder'}<button class="button-dark shrink-0 px-4 text-[11px]" disabled={!summary.total || !app.loaded} onclick={saveAndPack}>Save & pack <Icon name="arrow" size={15} /></button>{:else}<button class="button-quiet shrink-0 border border-line text-[11px]" onclick={editChecklist}><Icon name="edit" size={14} /> Edit list</button>{/if}
+	<div class="mx-auto flex max-w-2xl items-center justify-between gap-3">
+		<div class="min-w-0"><p class="text-sm font-semibold tracking-tight">{app.mode === 'builder' ? `${summary.total} items. One great trip.` : `${summary.packed} of ${summary.total} packed`}<span class="ml-1 text-xs text-muted">{app.mode === 'packing' ? `· ${summary.percent}%` : ''}</span></p>{#if app.mode === 'builder'}<p class="mt-1 text-[9px] text-muted">{app.storageError ? 'Storage needs attention' : 'Saved on your device. Ready when you are.'}</p>{:else}<div class="mt-2 h-1.5 w-34 max-w-full overflow-hidden rounded-full bg-sand"><div class="h-full rounded-full bg-forest transition-all duration-300" style:width={`${summary.percent}%`}></div></div>{/if}</div>
+		{#if app.mode === 'builder'}<button class="button-dark shrink-0 px-4 text-[11px]" disabled={!summary.total || !app.loaded} onclick={saveAndPack}>Save & pack <Icon name="arrow" size={15} /></button>{:else}
+			<div class="flex shrink-0 items-center gap-2">
+				<button class="icon-button size-11 border border-line text-forest" aria-label="Back to top" onclick={() => window.scrollTo({ top: 0, behavior: prefersReducedMotion.current ? 'instant' : 'smooth' })}><Icon name="arrow" size={18} class="-rotate-90" /></button>
+				<button class="button-quiet shrink-0 border border-line text-[11px]" onclick={editChecklist}><Icon name="edit" size={14} /> Edit list</button>
+			</div>
+		{/if}
 	</div>
 </div>
 
