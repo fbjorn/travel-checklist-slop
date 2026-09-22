@@ -12,6 +12,26 @@ pnpm dev
 
 Create a static production build with `pnpm build`. The existing static adapter and `src/routes/+layout.ts` prerender the site. There are no server routes, accounts, or external services.
 
+## Publish to GitHub Pages
+
+The workflow in `.github/workflows/deploy-pages.yml` builds and publishes the site on every push to `main`. You can also start it manually from GitHub's Actions tab. It uses Node.js 24 and the pnpm version pinned in `package.json`, installs existing dependencies from the lockfile, builds the static site, and uploads `build/` to Pages. It does not run tests, type checks, or linters.
+
+One-time setup on GitHub:
+
+1. Open [this repository's Pages settings](https://github.com/fbjorn/travel-checklist-slop/settings/pages).
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**. The workflow is already included; do not generate another one from a template.
+3. Commit and push these changes, including the workflow, `package.json`, `vite.config.ts`, and your app files, to `main`.
+4. Open [Actions](https://github.com/fbjorn/travel-checklist-slop/actions) and watch **Deploy to GitHub Pages**. To retry or redeploy without a new commit, choose that workflow, select **Run workflow**, and use the `main` branch.
+5. After the deployment succeeds, open the URL shown in the deployment job or in **Settings → Pages**. With the default GitHub domain, it will be [fbjorn.github.io/travel-checklist-slop/](https://fbjorn.github.io/travel-checklist-slop/).
+
+No personal access token, repository secret, `gh-pages` branch, or committed build directory is needed. The workflow requests its required permissions through GitHub's built-in token. If Actions are restricted in the repository or organization, allow the `actions/*` actions used in this workflow and `pnpm/action-setup`. If the `github-pages` environment has deployment branch restrictions, allow `main`.
+
+GitHub Pages is available for public repositories on GitHub Free, and for private repositories on eligible paid plans. See [GitHub's Pages setup documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site) and [custom workflow documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+
+The workflow reads the base path from GitHub Pages and passes it to SvelteKit using `BASE_PATH`. This handles the repository subpath without hard-coding the repository name in the app. Local development still uses `/`. If you later set up a custom domain in Pages settings, rerun the workflow so the build uses the new path.
+
+Saved checklists stay in each visitor's browser. Checklists created on localhost will not automatically appear on the published domain.
+
 ## Edit the catalog
 
 All suggested content lives in `src/lib/data/`:
