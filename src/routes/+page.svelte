@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { fly, slide } from 'svelte/transition';
+	import { cubicOut } from 'svelte/easing';
+	import { prefersReducedMotion } from 'svelte/motion';
 	import AppHeader from '$lib/components/AppHeader.svelte';
 	import Icon from '$lib/components/Icon.svelte';
 	import TravelIllustration from '$lib/components/TravelIllustration.svelte';
@@ -133,21 +136,25 @@
 						{#each [{ id: 'all', label: 'All items', count: summary.total }, { id: 'remaining', label: 'Still to pack', count: summary.total - summary.packed }, { id: 'packed', label: 'Packed', count: summary.packed }] as filter}<button class="min-h-10 flex-1 rounded-lg px-1 text-[11px] transition-colors {packingFilter === filter.id ? 'bg-paper font-semibold text-forest shadow-sm' : 'text-muted'}" aria-pressed={packingFilter === filter.id} onclick={() => packingFilter = filter.id as typeof packingFilter}>{filter.label}<span class="ml-1 text-[9px] opacity-65">{filter.count}</span></button>{/each}
 					</div>
 				{/if}
-				<div class="mb-4 flex items-center gap-2"><label class="search-field flex-1"><Icon name="search" size={15} /><input type="search" bind:value={search} placeholder="Find something on your list…" aria-label="Search your checklist" /></label><button class="icon-button shrink-0 border border-line bg-paper text-muted" onclick={() => expandedOverride = expandedOverride === true ? false : true} aria-label={expandedOverride === true ? 'Collapse all categories' : 'Expand all categories'} title={expandedOverride === true ? 'Collapse all categories' : 'Expand all categories'}><Icon name="down" size={16} class={expandedOverride === true ? 'rotate-180' : ''} /></button></div>
+				<div class="mb-4 flex items-center gap-2"><label class="search-field flex-1"><Icon name="search" size={15} /><input type="search" bind:value={search} placeholder="Find something on your list…" aria-label="Search your checklist" /></label><button class="icon-button shrink-0 border border-line bg-paper text-muted" onclick={() => expandedOverride = expandedOverride === true ? false : true} aria-label={expandedOverride === true ? 'Collapse all categories' : 'Expand all categories'} title={expandedOverride === true ? 'Collapse all categories' : 'Expand all categories'}><Icon name="down" size={16} class="transition-transform duration-200 {expandedOverride === true ? 'rotate-180' : ''}" /></button></div>
 
 				{#if app.mode === 'packing' && summary.percent === 100 && !search && packingFilter !== 'packed'}
-					<div class="mb-4 flex items-center gap-3 rounded-xl border border-[#ced7b4] bg-[#edf2db] p-4"><span class="grid size-10 shrink-0 place-items-center rounded-full bg-forest text-lime"><Icon name="check" size={22} /></span><div><h3 class="text-sm font-semibold text-forest">You’re all packed. Go make memories.</h3><p class="mt-1 text-[11px] text-muted">Everything on your list is ready for the adventure.</p></div><Icon name="sparkles" size={20} class="ml-auto hidden shrink-0 text-[#87915e] sm:block" /></div>
+					<div transition:slide={{ duration: prefersReducedMotion.current ? 0 : 240, easing: cubicOut }} class="mb-4 flex items-center gap-3 rounded-xl border border-[#ced7b4] bg-[#edf2db] p-4"><span class="grid size-10 shrink-0 place-items-center rounded-full bg-forest text-lime"><Icon name="check" size={22} /></span><div><h3 class="text-sm font-semibold text-forest">You’re all packed. Go make memories.</h3><p class="mt-1 text-[11px] text-muted">Everything on your list is ready for the adventure.</p></div><Icon name="sparkles" size={20} class="ml-auto hidden shrink-0 text-[#87915e] sm:block" /></div>
 				{/if}
 
+				{#key app.trip.id + app.mode}
 				<div class="space-y-3">
 					{#each groupedItems as group, index (app.trip.id + '-' + app.mode + '-' + group.category.id)}
+						<div transition:slide={{ duration: prefersReducedMotion.current ? 0 : 220, easing: cubicOut }}>
 						<CategoryCard category={group.category} items={group.items} visibleItems={group.visibleItems} mode={app.mode} initialOpen={index < 2 || group.category.id === 'beach' || !!group.category.custom} {expandedOverride} searching={!!search.trim() || packingFilter !== 'all'} ontoggle={app.togglePacked} onremove={app.removeItem} onquantity={app.changeQuantity} onadd={openItems} onpackall={app.packCategory} ondelete={(id) => confirmation = { kind: 'category', id, name: group.category.name }} />
+						</div>
 					{:else}
 						{#if !(app.mode === 'packing' && summary.percent === 100 && packingFilter === 'remaining' && !search)}
 							<div class="rounded-2xl border border-dashed border-[#cdd0bd] bg-paper px-5 py-12 text-center"><span class="mx-auto grid size-13 place-items-center rounded-2xl bg-sand text-forest"><Icon name={search ? 'search' : 'bag'} size={25} /></span><h3 class="mt-4 font-display text-2xl">{search ? 'Not in this bag… yet.' : !summary.total ? 'Every adventure starts somewhere.' : packingFilter === 'packed' ? 'One check is all it takes.' : 'Nothing here right now.'}</h3><p class="mx-auto mt-2 max-w-65 text-xs leading-relaxed text-muted">{search ? 'Try another search, or add something of your own.' : !summary.total ? 'Pick a topic pack or add your first item to start your list.' : 'Your items will appear here as you pack.'}</p>{#if search}<button class="button-quiet mt-4 text-xs" onclick={() => search = ''}>Clear search</button>{:else if app.mode === 'builder'}<button class="button-dark mt-5" onclick={() => topicModal = true}>Explore topic packs <Icon name="arrow" size={15} /></button>{:else}<button class="button-quiet mt-4 text-xs" onclick={() => packingFilter = 'all'}>Show all items</button>{/if}</div>
 						{/if}
 					{/each}
 				</div>
+				{/key}
 				{#if app.mode === 'builder'}<button class="mt-4 flex min-h-14 w-full items-center justify-center gap-2 rounded-xl border border-dashed border-[#ccd0bd] text-xs font-medium text-muted transition-colors hover:border-forest hover:bg-[#eff0e4] hover:text-forest" onclick={showCategoryModal}><Icon name="plus" size={16} /> Make your own category</button>{:else if summary.packed > 0}<button class="button-quiet mx-auto mt-5 flex text-[11px] text-muted" onclick={() => confirmation = { kind: 'packing', name: app.trip.name }}><Icon name="reset" size={13} /> Reset packing progress</button>{/if}
 				<p class="mt-5 text-center text-[10px] leading-relaxed text-muted">{app.mode === 'builder' ? 'Your list, your rules. Adjust quantities for your trip and make room for your favorites.' : 'Progress counts checklist entries. Tick an item once you’ve packed its full quantity.'}</p>
 			</section>
@@ -172,7 +179,7 @@
 	</div>
 </div>
 
-{#if app.notice}<div class="toast-enter fixed right-4 bottom-26 left-4 z-40 mx-auto flex max-w-md items-center gap-3 rounded-xl border border-[#53654b] bg-forest px-4 py-3.5 text-white shadow-lg lg:bottom-6" role="status"><Icon name="check" size={17} class="shrink-0 text-lime" /><p class="flex-1 text-xs leading-relaxed">{app.notice}</p>{#if app.undo}<button class="min-h-8 shrink-0 text-xs font-semibold text-lime underline underline-offset-4" onclick={() => app.undo?.()}>Undo</button>{/if}<button class="grid size-8 shrink-0 place-items-center rounded-md text-white/65 hover:bg-white/10" aria-label="Dismiss notification" onclick={() => app.notice = ''}><Icon name="x" size={14} /></button></div>{/if}
+{#if app.notice}<div transition:fly={{ y: 12, duration: prefersReducedMotion.current ? 0 : 200, easing: cubicOut }} class="fixed right-4 bottom-26 left-4 z-40 mx-auto flex max-w-md items-center gap-3 rounded-xl border border-[#53654b] bg-forest px-4 py-3.5 text-white shadow-lg lg:bottom-6" role="status"><Icon name="check" size={17} class="shrink-0 text-lime" /><p class="flex-1 text-xs leading-relaxed">{app.notice}</p>{#if app.undo}<button class="min-h-8 shrink-0 text-xs font-semibold text-lime underline underline-offset-4" onclick={() => app.undo?.()}>Undo</button>{/if}<button class="grid size-8 shrink-0 place-items-center rounded-md text-white/65 hover:bg-white/10" aria-label="Dismiss notification" onclick={() => app.notice = ''}><Icon name="x" size={14} /></button></div>{/if}
 
 <TopicModal open={topicModal} selected={app.trip.topicIds} ontoggle={app.toggleTopic} onclose={() => topicModal = false} />
 <ItemModal open={itemModal} categories={app.trip.categories} items={app.trip.items} initialCategory={itemCategory} onadd={app.addCatalogItem} oncustom={app.addCustomItem} onclose={() => itemModal = false} />

@@ -21,10 +21,10 @@
 				<section><h3 class="eyebrow mb-3">{group}</h3><div class="grid gap-2 sm:grid-cols-2">
 					{#each groupTopics as topic}
 						{@const active = selected.includes(topic.id)}
-						<button class="flex items-start gap-3 rounded-xl border p-4 text-left transition-colors {active ? 'border-[#bdcba7] bg-[#f0f3e6]' : 'border-line hover:bg-canvas'}" aria-pressed={active} onclick={() => ontoggle(topic.id)}>
+						<button class="topic-option flex items-start gap-3 rounded-xl border p-4 text-left transition-colors {active ? 'border-[#bdcba7] bg-[#f0f3e6]' : 'border-line hover:bg-canvas'}" aria-pressed={active} onclick={() => ontoggle(topic.id)}>
 							<span class="tint-{topic.color} grid size-9 shrink-0 place-items-center rounded-lg"><Icon name={topic.icon} size={18} /></span>
 							<span class="min-w-0 flex-1"><span class="block text-xs font-semibold">{topic.name}</span><span class="mt-1 block text-[10px] leading-relaxed text-muted">{topic.description}</span><span class="mt-2 block text-[10px] font-medium text-forest">{topic.itemIds.length} suggestions</span></span>
-							<span class="mt-1 grid size-5 shrink-0 place-items-center rounded-full {active ? 'bg-forest text-white' : 'border border-line text-muted'}"><Icon name={active ? 'check' : 'plus'} size={12} /></span>
+							<span class="topic-choice mt-1 grid size-5 shrink-0 place-items-center rounded-full {active ? 'bg-forest text-white' : 'border border-line text-muted'}"><Icon name={active ? 'check' : 'plus'} size={12} /></span>
 						</button>
 					{/each}
 				</div></section>

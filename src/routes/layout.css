@@ -63,15 +63,37 @@
 	box-shadow: 0 24px 100px #1e342633;
 	overflow: hidden;
 }
-.modal-shell::backdrop { background: #1f352958; backdrop-filter: blur(5px); }
-.modal-shell[open] { animation: enter-modal 180ms ease-out; }
+.modal-shell::backdrop { background: #1f352958; backdrop-filter: blur(5px); animation: enter-backdrop 200ms ease-out; }
+.modal-shell[open] { animation: enter-modal 220ms cubic-bezier(.16, 1, .3, 1); }
 body:has(dialog[open]) { overflow: hidden; }
 .travel-illustration { width: 100%; height: auto; }
 .page-enter { animation: enter-page 550ms ease-out both; }
-.toast-enter { animation: enter-modal 180ms ease-out both; }
 .safe-bottom { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
-@keyframes enter-modal { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes enter-modal { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: translateY(0); } }
+@keyframes enter-backdrop { from { opacity: 0; } to { opacity: 1; } }
 @keyframes enter-page { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+/* Small, finite responses keep the checklist calm while making actions feel tangible. */
+.button-dark, .button-lime, .button-quiet, .icon-button, .topic-option {
+	transition-property: background-color, border-color, color, box-shadow, transform;
+	transition-duration: 180ms;
+	transition-timing-function: ease-out;
+}
+.button-dark:active:not(:disabled), .button-lime:active:not(:disabled),
+.button-quiet:active:not(:disabled), .icon-button:active:not(:disabled), .topic-option:active {
+	transform: scale(.97);
+}
+.topic-choice { transition: background-color 180ms, color 180ms, transform 220ms; }
+.topic-option[aria-pressed='true'] .topic-choice { transform: rotate(0deg) scale(1.08); }
+.topic-option[aria-pressed='false'] .topic-choice { transform: rotate(-90deg) scale(1); }
+@media (hover: hover) and (pointer: fine) {
+	.button-dark:hover:not(:disabled), .button-lime:hover:not(:disabled), .topic-option:hover {
+		transform: translateY(-2px);
+	}
+	.button-dark:active:not(:disabled), .button-lime:active:not(:disabled), .topic-option:active {
+		transform: scale(.97);
+	}
+}
 @media (prefers-reduced-motion: reduce) {
 	*, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+	.button-dark, .button-lime, .button-quiet, .icon-button, .topic-option, .topic-choice { transform: none !important; }
 }
